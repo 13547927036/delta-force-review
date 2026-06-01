@@ -454,6 +454,15 @@
             { name: '失败', options: ['枪法差', '意识差', '配合差', '战术问题', '装备问题', '心态问题', '网络/硬件'] }
         ];
         
+        const GAME_DEFAULTS = {
+            '三角洲行动': {
+                loss: ['枪法差', '意识差', '配合差', '战术问题', '装备问题', '心态问题', '网络/硬件']
+            },
+            '王者荣耀': {
+                loss: ['被 gank', '团战失误', '落单被抓', '操作失误', '视野差', '判断错', '队友挂机', '阵容不好', '经济落后', '其他']
+            }
+        };
+        
         // ===== 初始化 =====
         function init() {
             const savedGames = localStorage.getItem('gameReviewGames');
@@ -468,16 +477,17 @@
                 if (savedTags) {
                     gameTags[i] = JSON.parse(savedTags);
                 } else {
-                    const reasonsKey = `gameReviewReasons_${i}`;
-                    const savedReasons = localStorage.getItem(reasonsKey);
                     const winLabelKey = `gameReviewWinLabel_${i}`;
                     const lossLabelKey = `gameReviewLossLabel_${i}`;
                     const savedWinLabel = localStorage.getItem(winLabelKey);
                     const savedLossLabel = localStorage.getItem(lossLabelKey);
                     
+                    const gameDefault = GAME_DEFAULTS[game];
+                    const lossOptions = gameDefault ? [...gameDefault.loss] : [...DEFAULT_TAGS[1].options];
+                    
                     gameTags[i] = [
                         { name: savedWinLabel || '胜利', options: [] },
-                        { name: savedLossLabel || '失败', options: savedReasons ? JSON.parse(savedReasons) : [...DEFAULT_TAGS[1].options] }
+                        { name: savedLossLabel || '失败', options: lossOptions }
                     ];
                 }
                 
